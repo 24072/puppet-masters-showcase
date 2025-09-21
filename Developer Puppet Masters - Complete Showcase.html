@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Developer Puppet Masters - Complete Showcase</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+            background: linear-gradient(to bottom, #0a0a1a, #000000);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 0;
+            position: relative;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 10px;
+            text-shadow: 0 0 15px rgba(100, 150, 255, 0.5);
+            background: linear-gradient(to right, #aaa, #fff, #aaa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 3px;
+            background: linear-gradient(to right, transparent, #0ff, transparent);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            margin-bottom: 30px;
+            color: #a0a0ff;
+        }
+        
+        /* Hands Section */
+        .hands-container {
+            display: flex;
+            justify-content: space-between;
+            margin: 40px 0;
+            position: relative;
+            min-height: 500px;
+            gap: 30px;
+        }
+        
+        .hand {
+            width: 48%;
+            position: relative;
+            perspective: 1000px;
+        }
+        
+        .hand-inner {
+            position: relative;
+            width: 100%;
+            height: 320px;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+            cursor: pointer;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+        
+        .hand:hover .hand-inner {
+            transform: rotateY(180deg);
+        }
+        
+        .hand-front, .hand-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .hand-front {
+            background: linear-gradient(145deg, #1a1a2a, #0a0a1a);
+            border: 2px solid #334455;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+        
+        .hand-back {
+            background: linear-gradient(145deg, #0a0a1a, #1a1a2a);
+            transform: rotateY(180deg);
+            border: 2px solid #445566;
+            overflow-y: auto;
+            justify-content: flex-start;
+        }
+        
+        .hand-title {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #0ff;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+        }
+        
+        .hand-icon {
+            font-size: 5rem;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 15px rgba(100, 200, 255, 0.5));
+            color: #a0d0ff;
+        }
+        
+        .hand-description {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #ccd;
+            max-width: 80%;
+        }
+        
+        /* Puppet Styles */
+        .puppets-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            width: 100%;
+            margin-top: 15px;
+        }
+        
+        .puppet {
+            background: rgba(20, 30, 50, 0.6);
+            border: 1px solid #445577;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .puppet::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent, rgba(0, 200, 255, 0.1), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .puppet:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 200, 255, 0.2);
+            border-color: #0ff;
+        }
+        
+        .puppet:hover::before {
+            opacity: 1;
+        }
+        
+        .puppet-icon {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.3));
+        }
+        
+        .puppet-name {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            color: #bbd;
+        }
+        
+        /* Strings */
+        .strings {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .string {
+            position: absolute;
+            background: linear-gradient(to bottom, transparent, #a0f0ff, transparent);
+            width: 2px;
+            height: 320px;
+            opacity: 0.7;
+            transform-origin: top center;
+            animation: pulseString 3s infinite;
+        }
+        
+        @keyframes pulseString {
+            0%, 100% { 
+                opacity: 0.5;
+                box-shadow: 0 0 5px #a0f0ff, 0 0 10px #a0f0ff;
+            }
+            50% { 
+                opacity: 0.9;
+                box-shadow: 0 0 15px #a0f0ff, 0 0 20px #a0f0ff, 0 0 30px #0ff;
+            }
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 5, 15, 0.95);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+        
+        .modal-content {
+            background: linear-gradient(145deg, #0a0a1a, #1a1a2a);
+            border: 2px solid #445577;
+            border-radius: 15px;
+            padding: 35px;
+            width: 90%;
+            max-width: 700px;
+            max-height: 85vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 0 40px rgba(0, 200, 255, 0.3);
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #ccd;
+            transition: color 0.3s;
+            background: none;
+            border: none;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+        
+        .close-modal:hover {
+            color: #0ff;
+            background: rgba(0, 200, 255, 0.1);
+        }
+        
+        .modal-title {
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #0ff;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+            padding-bottom: 10px;
+            border-bottom: 1px solid #334455;
+        }
+        
+        .modal-icon {
+            font-size: 3.5rem;
+            text-align: center;
+            margin: 15px 0;
+            filter: drop-shadow(0 0 10px rgba(100, 200, 255, 0.3));
+        }
+        
+        .modal-description {
+            line-height: 1.7;
+            margin-bottom: 25px;
+            color: #ccd;
+            font-size: 1.1rem;
+        }
+        
+        .modal-features {
+            margin-bottom: 25px;
+        }
+        
+        .modal-features h3 {
+            margin-bottom: 15px;
+            color: #0ff;
+            font-size: 1.4rem;
+            border-left: 4px solid #0ff;
+            padding-left: 10px;
+        }
+        
+        .modal-features ul {
+            padding-left: 25px;
+        }
+        
+        .modal-features li {
+            margin-bottom: 10px;
+            color: #bbd;
+            line-height: 1.5;
+        }
+        
+        .modal-features li::marker {
+            color: #0ff;
+        }
+        
+        /* Controls */
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 40px 0;
+        }
+        
+        .control-btn {
+            background: linear-gradient(145deg, #1a1a2a, #0a0a1a);
+            color: #ccd;
+            border: 1px solid #445577;
+            padding: 14px 28px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .control-btn:hover {
+            background: linear-gradient(145deg, #0a0a1a, #1a1a2a);
+            box-shadow: 0 0 15px rgba(0, 200, 255, 0.2);
+            color: #0ff;
+            border-color: #0ff;
+            transform: translateY(-3px);
+        }
+        
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 50px;
+            border-top: 1px solid #223344;
+            font-size: 0.95rem;
+            opacity: 0.7;
+            color: #99a;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 1000px) {
+            .hands-container {
+                flex-direction: column;
+                align-items: center;
+                gap: 50px;
+            }
+            
+            .hand {
+                width: 90%;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+        }
+        
+        @media (max-width: 650px) {
+            .puppets-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .hand-inner {
+                height: 450px;
+            }
+            
+            .control-btn {
+                padding: 12px 20px;
+                font-size: 1rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .hand-title {
+                font-size: 1.5rem;
+            }
+            
+            .modal-content {
+                padding: 25px;
+            }
+            
+            .modal-title {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Developer Puppet Masters</h1>
+            <p class="subtitle">A surreal showcase of Full Stack vs AI-Integrated Development</p>
+        </header>
+        
+        <div class="hands-container">
+            <!-- Strings -->
+            <div class="strings" id="strings"></div>
+            
+            <!-- Full Stack Developer Hand -->
+            <div class="hand">
+                <div class="hand-inner">
+                    <div class="hand-front">
+                        <div class="hand-icon">🖐️</div>
+                        <h2 class="hand-title">Full Stack Developer</h2>
+                        <p class="hand-description">Controls the fundamental technologies of web development</p>
+                        <p>Hover to explore technologies</p>
+                    </div>
+                    <div class="hand-back">
+                        <h2 class="hand-title">Full Stack Technologies</h2>
+                        <div class="puppets-grid">
+                            <div class="puppet" data-tech="html5">
+                                <div class="puppet-icon">🛡️</div>
+                                <div class="puppet-name">HTML5 Shield</div>
+                            </div>
+                            <div class="puppet" data-tech="css3">
+                                <div class="puppet-icon">💎</div>
+                                <div class="puppet-name">CSS3 Gem</div>
+                            </div>
+                            <div class="puppet" data-tech="javascript">
+                                <div class="puppet-icon">🏹</div>
+                                <div class="puppet-name">JS Archer</div>
+                            </div>
+                            <div class="puppet" data-tech="react">
+                                <div class="puppet-icon">⚛️</div>
+                                <div class="puppet-name">React Knight</div>
+                            </div>
+                            <div class="puppet" data-tech="nodejs">
+                                <div class="puppet-icon">🔧</div>
+                                <div class="puppet-name">Node Engineer</div>
+                            </div>
+                            <div class="puppet" data-tech="github">
+                                <div class="puppet-icon">📘</div>
+                                <div class="puppet-name">GitHub Scribe</div>
+                            </div>
+                            <div class="puppet" data-tech="docker">
+                                <div class="puppet-icon">🐳</div>
+                                <div class="puppet-name">Docker Worker</div>
+                            </div>
+                            <div class="puppet" data-tech="sql">
+                                <div class="puppet-icon">📜</div>
+                                <div class="puppet-name">SQL Archivist</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- AI Developer Hand -->
+            <div class="hand">
+                <div class="hand-inner">
+                    <div class="hand-front">
+                        <div class="hand-icon">🖐️</div>
+                        <h2 class="hand-title">AI-Integrated Developer</h2>
+                        <p class="hand-description">Controls advanced AI and machine learning technologies</p>
+                        <p>Hover to explore technologies</p>
+                    </div>
+                    <div class="hand-back">
+                        <h2 class="hand-title">AI Technologies</h2>
+                        <div class="puppets-grid">
+                            <div class="puppet" data-tech="python">
+                                <div class="puppet-icon">🧪</div>
+                                <div class="puppet-name">Python Scientist</div>
+                            </div>
+                            <div class="puppet" data-tech="tensorflow">
+                                <div class="puppet-icon">🔩</div>
+                                <div class="puppet-name">TensorFlow Engineer</div>
+                            </div>
+                            <div class="puppet" data-tech="pytorch">
+                                <div class="puppet-icon">🔥</div>
+                                <div class="puppet-name">PyTorch Welder</div>
+                            </div>
+                            <div class="puppet" data-tech="openai">
+                                <div class="puppet-icon">🔮</div>
+                                <div class="puppet-name">OpenAI Conjurer</div>
+                            </div>
+                            <div class="puppet" data-tech="langchain">
+                                <div class="puppet-icon">⛓️</div>
+                                <div class="puppet-name">LangChain Blacksmith</div>
+                            </div>
+                            <div class="puppet" data-tech="huggingface">
+                                <div class="puppet-icon">🧘</div>
+                                <div class="puppet-name">HuggingFace Monk</div>
+                            </div>
+                            <div class="puppet" data-tech="vectordb">
+                                <div class="puppet-icon">📐</div>
+                                <div class="puppet-name">Vector DB Librarian</div>
+                            </div>
+                            <div class="puppet" data-tech="cloudai">
+                                <div class="puppet-icon">👁️</div>
+                                <div class="puppet-name">Cloud AI Strategist</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <button class="control-btn" onclick="toggleAnimation()">Pause Animation</button>
+            <button class="control-btn" onclick="location.reload()">Reset View</button>
+        </div>
+        
+        <footer>
+            <p>Surreal Developer Puppet Masters | Created with HTML, CSS, and JavaScript</p>
+        </footer>
+    </div>
+
+    <!-- Modal for Technology Details -->
+    <div class="modal" id="techModal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeModal()">&times;</button>
+            <h2 class="modal-title" id="modalTechTitle">Technology Name</h2>
+            <div class="modal-icon" id="modalTechIcon">🔮</div>
+            <p class="modal-description" id="modalTechDescription"></p>
+            <div class="modal-features">
+                <h3>Key Features</h3>
+                <ul id="modalTechFeatures"></ul>
+            </div>
+            <div class="modal-features">
+                <h3>Common Use Cases</h3>
+                <ul id="modalTechUseCases"></ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Technology data for both Full Stack and AI
+        const techData = {
+            // Full Stack Technologies
+            html5: {
+                title: "HTML5 Shield",
+                icon: "🛡️",
+                description: "HTML5 is the latest evolution of the standard that defines HTML. It provides new features that are essential for modern web applications, including multimedia support, improved semantics, and enhanced accessibility.",
+                features: [
+                    "Semantic elements for better document structure",
+                    "Audio and video support without plugins",
+                    "Canvas element for drawing graphics",
+                    "Local storage for client-side data",
+                    "Improved form controls and validation"
+                ],
+                useCases: [
+                    "Structuring content for web pages",
+                    "Embedding multimedia content",
+                    "Creating interactive graphics and games",
+                    "Building offline web applications",
+                    "Developing mobile web applications"
+                ]
+            },
+            css3: {
+                title: "CSS3 Gem",
+                icon: "💎",
+                description: "CSS3 is the latest version of the Cascading Style Sheets language that describes the presentation of web pages. It brings powerful styling capabilities, animations, and responsive design features.",
+                features: [
+                    "Flexbox and Grid layout systems",
+                    "Advanced animations and transitions",
+                    "Media queries for responsive design",
+                    "Custom properties (CSS variables)",
+                    "Filters and blending modes"
+                ],
+                useCases: [
+                    "Creating responsive website layouts",
+                    "Designing sophisticated animations",
+                    "Implementing dark/light mode themes",
+                    "Building complex grid-based designs",
+                    "Styling for print and other media types"
+                ]
+            },
+            javascript: {
+                title: "JavaScript Archer",
+                icon: "🏹",
+                description: "JavaScript is a high-level, interpreted programming language that is one of the core technologies of the World Wide Web. It enables interactive web pages and is an essential part of web applications.",
+                features: [
+                    "Client-side scripting for web browsers",
+                    "Asynchronous programming with Promises",
+                    "DOM manipulation for dynamic content",
+                    "Event-driven programming model",
+                    "Extensive ecosystem of libraries and frameworks"
+                ],
+                useCases: [
+                    "Adding interactivity to web pages",
+                    "Building single-page applications",
+                    "Creating web and mobile apps",
+                    "Developing server-side applications with Node.js",
+                    "Game development for web browsers"
+                ]
+            },
+            react: {
+                title: "React Knight",
+                icon: "⚛️",
+                description: "React is an open-source JavaScript library for building user interfaces, particularly single-page applications. It allows developers to create reusable UI components and efficiently update and render them.",
+                features: [
+                    "Component-based architecture",
+                    "Virtual DOM for efficient rendering",
+                    "JSX syntax for writing HTML in JavaScript",
+                    "Unidirectional data flow with props",
+                    "Hooks for state and lifecycle management"
+                ],
+                useCases: [
+                    "Building single-page applications",
+                    "Creating reusable UI component libraries",
+                    "Developing complex user interfaces",
+                    "Progressive web applications (PWAs)",
+                    "Mobile app development with React Native"
+                ]
+            },
+            nodejs: {
+                title: "Node.js Engineer",
+                icon: "🔧",
+                description: "Node.js is an open-source, cross-platform JavaScript runtime environment that executes JavaScript code outside a web browser. It allows developers to use JavaScript for server-side scripting.",
+                features: [
+                    "Non-blocking I/O model for efficiency",
+                    "Event-driven architecture",
+                    "NPM ecosystem with vast package library",
+                    "Built-in HTTP server library",
+                    "Cross-platform compatibility"
+                ],
+                useCases: [
+                    "Building scalable network applications",
+                    "Developing RESTful APIs and web services",
+                    "Real-time applications like chats and games",
+                    "Server-side rendering for web applications",
+                    "Microservices architecture implementation"
+                ]
+            },
+            github: {
+                title: "GitHub Scribe",
+                icon: "📘",
+                description: "GitHub is a web-based platform for version control and collaboration using Git. It allows multiple developers to work on projects together, tracking changes and managing code repositories.",
+                features: [
+                    "Git repository hosting",
+                    "Pull requests and code review",
+                    "Issue tracking and project management",
+                    "GitHub Actions for CI/CD",
+                    "Pages for static site hosting"
+                ],
+                useCases: [
+                    "Version control for software projects",
+                    "Collaborative software development",
+                    "Open source project hosting",
+                    "Documentation and wiki creation",
+                    "Automated testing and deployment"
+                ]
+            },
+            docker: {
+                title: "Docker Worker",
+                icon: "🐳",
+                description: "Docker is a set of platform-as-a-service products that use OS-level virtualization to deliver software in packages called containers. Containers are isolated from each other and bundle their own software, libraries, and configuration files.",
+                features: [
+                    "Containerization technology",
+                    "Lightweight virtualization",
+                    "Docker images and Dockerfile",
+                    "Docker Compose for multi-container apps",
+                    "Docker Hub for image sharing"
+                ],
+                useCases: [
+                    "Application isolation and deployment",
+                    "Microservices architecture",
+                    "Development environment standardization",
+                    "Continuous integration and deployment",
+                    "Scalable cloud applications"
+                ]
+            },
+            sql: {
+                title: "SQL Archivist",
+                icon: "📜",
+                description: "SQL (Structured Query Language) is a domain-specific language used in programming and designed for managing data held in a relational database management system (RDBMS). It is the standard language for relational database management systems.",
+                features: [
+                    "Data definition and manipulation",
+                    "Transaction control",
+                    "Query optimization",
+                    "Data integrity and security",
+                    "Stored procedures and functions"
+                ],
+                useCases: [
+                    "Database management and administration",
+                    "Data analysis and reporting",
+                    "Web application data storage",
+                    "Business intelligence systems",
+                    "Data migration and transformation"
+                ]
+            },
+            
+            // AI Technologies
+            python: {
+                title: "Python Scientist",
+                icon: "🧪",
+                description: "Python is a high-level, interpreted programming language known for its simplicity and readability. It's the leading language in AI and machine learning development due to its extensive ecosystem of libraries and frameworks.",
+                features: [
+                    "Simple syntax that emphasizes readability",
+                    "Extensive standard library and third-party packages",
+                    "Dynamically typed and garbage-collected",
+                    "Support for multiple programming paradigms",
+                    "Strong community support and documentation"
+                ],
+                useCases: [
+                    "Machine learning and deep learning projects",
+                    "Data analysis and visualization",
+                    "Web development (Django, Flask)",
+                    "Scientific and numeric computing",
+                    "Automation and scripting tasks"
+                ]
+            },
+            tensorflow: {
+                title: "TensorFlow Engineer",
+                icon: "🔩",
+                description: "TensorFlow is an open-source machine learning framework developed by Google. It provides a comprehensive ecosystem of tools, libraries, and community resources that lets researchers and developers build and deploy ML-powered applications.",
+                features: [
+                    "Flexible architecture for deploying computation across various platforms",
+                    "Powerful Keras API for building and training models",
+                    "TensorFlow Lite for mobile and embedded devices",
+                    "TensorFlow.js for machine learning in JavaScript",
+                    "TensorFlow Extended (TFX) for end-to-end ML pipelines"
+                ],
+                useCases: [
+                    "Training and deploying deep neural networks",
+                    "Natural language processing applications",
+                    "Computer vision and image recognition",
+                    "Time series analysis and forecasting",
+                    "Recommendation systems"
+                ]
+            },
+            pytorch: {
+                title: "PyTorch Welder",
+                icon: "🔥",
+                description: "PyTorch is an open-source machine learning library developed by Facebook's AI Research lab. It provides two high-level features: tensor computation with strong GPU acceleration and deep neural networks built on a tape-based autograd system.",
+                features: [
+                    "Imperative programming style for easier debugging",
+                    "Dynamic computational graphs",
+                    "Strong GPU acceleration support",
+                    "Distributed training capabilities",
+                    "Seamless integration with Python ecosystem"
+                ],
+                useCases: [
+                    "Academic research and prototyping",
+                    "Computer vision applications",
+                    "Natural language processing",
+                    "Reinforcement learning",
+                    "Generative adversarial networks (GANs)"
+                ]
+            },
+            openai: {
+                title: "OpenAI Conjurer",
+                icon: "🔮",
+                description: "OpenAI is an AI research and deployment company with a mission to ensure that artificial general intelligence benefits all of humanity. They develop powerful AI models like GPT and DALL-E that can understand and generate natural language and images.",
+                features: [
+                    "GPT models for natural language understanding and generation",
+                    "DALL-E for image generation from text descriptions",
+                    "Codex for translating natural language to code",
+                    "API access to powerful AI models",
+                    "Fine-tuning capabilities for specific tasks"
+                ],
+                useCases: [
+                    "Chatbots and conversational AI",
+                    "Content generation and summarization",
+                    "Code generation and assistance",
+                    "Image creation and editing",
+                    "Language translation and understanding"
+                ]
+            },
+            langchain: {
+                title: "LangChain Blacksmith",
+                icon: "⛓️",
+                description: "LangChain is a framework for developing applications powered by language models. It provides tools and abstractions to make it easier to build context-aware, reasoning applications with large language models.",
+                features: [
+                    "Modular components for working with language models",
+                    "Chains for sequences of calls to components",
+                    "Agents for dynamic chain calls based on user input",
+                    "Memory to persist state between chain calls",
+                    "Indexes for combining language models with your own text data"
+                ],
+                useCases: [
+                    "Document question answering systems",
+                    "Chatbots with memory and context",
+                    "Analysis of structured data using natural language",
+                    "Summarization of long documents",
+                    "Code understanding and generation tools"
+                ]
+            },
+            huggingface: {
+                title: "HuggingFace Monk",
+                icon: "🧘",
+                description: "Hugging Face is a company that develops tools for building applications using machine learning. They are most notable for their Transformers library, which provides thousands of pre-trained models to perform tasks on texts such as classification, information extraction, and more.",
+                features: [
+                    "Transformers library with thousands of pre-trained models",
+                    "Datasets library for accessing and sharing datasets",
+                    "Spaces for hosting and sharing ML demos",
+                    "Inference API for running models without setup",
+                    "Model hub for sharing and discovering models"
+                ],
+                useCases: [
+                    "Natural language processing tasks",
+                    "Transfer learning with pre-trained models",
+                    "Model fine-tuning for specific domains",
+                    "Sharing and collaborating on ML models",
+                    "Rapid prototyping of AI applications"
+                ]
+            },
+            vectordb: {
+                title: "Vector DB Librarian",
+                icon: "📐",
+                description: "Vector databases are specialized storage systems designed to handle high-dimensional vector data. They enable efficient similarity search and are essential for many AI applications that work with embeddings from machine learning models.",
+                features: [
+                    "Efficient similarity search for high-dimensional vectors",
+                    "Scalability to handle billions of vectors",
+                    "Metadata filtering and hybrid search capabilities",
+                    "Persistence and durability for vector data",
+                    "Integration with machine learning frameworks"
+                ],
+                useCases: [
+                    "Semantic search applications",
+                    "Recommendation systems",
+                    "Image and video similarity search",
+                    "Anomaly detection in high-dimensional data",
+                    "Retrieval-augmented generation for LLMs"
+                ]
+            },
+            cloudai: {
+                title: "Cloud AI Strategist",
+                icon: "👁️",
+                description: "Cloud AI services provide managed machine learning and artificial intelligence capabilities through cloud platforms. These services allow developers to integrate AI features into applications without building models from scratch.",
+                features: [
+                    "Pre-trained AI models for common tasks",
+                    "AutoML for custom model training without code",
+                    "Scalable infrastructure for training and inference",
+                    "Integration with other cloud services",
+                    "Enterprise-grade security and compliance"
+                ],
+                useCases: [
+                    "Adding vision capabilities to applications",
+                    "Integrating speech recognition and synthesis",
+                    "Implementing language translation features",
+                    "Building personalized recommendation systems",
+                    "Adding predictive analytics to business applications"
+                ]
+            }
+        };
+
+        // Create neural energy strings
+        function createStrings() {
+            const stringsContainer = document.getElementById('strings');
+            stringsContainer.innerHTML = '';
+            
+            // Strings for left hand
+            for (let i = 0; i < 8; i++) {
+                const string = document.createElement('div');
+                string.classList.add('string');
+                string.style.left = `${12.5 + i * 11.5}%`;
+                string.style.animationDelay = `${i * 0.2}s`;
+                stringsContainer.appendChild(string);
+            }
+            
+            // Strings for right hand
+            for (let i = 0; i < 8; i++) {
+                const string = document.createElement('div');
+                string.classList.add('string');
+                string.style.left = `${57.5 + i * 11.5}%`;
+                string.style.animationDelay = `${i * 0.2 + 0.5}s`;
+                stringsContainer.appendChild(string);
+            }
+        }
+        
+        // Control functions
+        let isAnimating = true;
+        
+        function toggleAnimation() {
+            const strings = document.querySelectorAll('.string');
+            const btn = document.querySelector('.control-btn');
+            
+            if (isAnimating) {
+                strings.forEach(string => {
+                    string.style.animationPlayState = 'paused';
+                });
+                btn.textContent = 'Play Animation';
+            } else {
+                strings.forEach(string => {
+                    string.style.animationPlayState = 'running';
+                });
+                btn.textContent = 'Pause Animation';
+            }
+            
+            isAnimating = !isAnimating;
+        }
+        
+        // Modal functions
+        function openModal(tech) {
+            const modal = document.getElementById('techModal');
+            const data = techData[tech];
+            
+            document.getElementById('modalTechTitle').textContent = data.title;
+            document.getElementById('modalTechIcon').textContent = data.icon;
+            document.getElementById('modalTechDescription').textContent = data.description;
+            
+            const featuresList = document.getElementById('modalTechFeatures');
+            featuresList.innerHTML = '';
+            data.features.forEach(feature => {
+                const li = document.createElement('li');
+                li.textContent = feature;
+                featuresList.appendChild(li);
+            });
+            
+            const useCasesList = document.getElementById('modalTechUseCases');
+            useCasesList.innerHTML = '';
+            data.useCases.forEach(useCase => {
+                const li = document.createElement('li');
+                li.textContent = useCase;
+                useCasesList.appendChild(li);
+            });
+            
+            modal.style.display = 'flex';
+        }
+        
+        function closeModal() {
+            const modal = document.getElementById('techModal');
+            modal.style.display = 'none';
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            createStrings();
+            
+            // Add hover effect to puppets
+            const puppets = document.querySelectorAll('.puppet');
+            puppets.forEach(puppet => {
+                puppet.addEventListener('mouseenter', () => {
+                    puppet.style.backgroundColor = 'rgba(40, 60, 100, 0.7)';
+                });
+                
+                puppet.addEventListener('mouseleave', () => {
+                    puppet.style.backgroundColor = 'rgba(20, 30, 50, 0.6)';
+                });
+                
+                // Add click event for puppets
+                const tech = puppet.getAttribute('data-tech');
+                if (tech) {
+                    puppet.addEventListener('click', () => {
+                        openModal(tech);
+                    });
+                }
+            });
+            
+            // Close modal when clicking outside content
+            window.addEventListener('click', (event) => {
+                const modal = document.getElementById('techModal');
+                if (event.target === modal) {
+                    closeModal();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
